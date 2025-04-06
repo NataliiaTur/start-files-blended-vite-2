@@ -7,15 +7,21 @@ const initialValues = {
   search: '',
 };
 
-const FormComponent = ({ addTodo }) => {
+const FormComponent = ({ addTodo, onPhotoSubmit }) => {
   const onSubmit = (values, actions) => {
     const trimmed = values.search.trim();
     if (trimmed === '') return;
 
-    addTodo({
-      text: trimmed,
-      id: nanoid(3),
-    });
+    if (addTodo) {
+      addTodo({
+        text: trimmed,
+        id: nanoid(3),
+      });
+    }
+
+    if (onPhotoSubmit) {
+      onPhotoSubmit(trimmed);
+    }
 
     actions.resetForm();
   };

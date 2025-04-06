@@ -2,10 +2,9 @@
 // import { HiH3 } from 'react-icons/hi2';
 import css from './TodoListItem.module.css';
 import Text from '../Text/Text';
+import { RiDeleteBinLine, RiEdit2Line } from 'react-icons/ri';
 
-import { RiDeleteBinLine } from 'react-icons/ri';
-// import { RiDeleteBinLine, RiEdit2Line } from 'react-icons/ri';
-const TodoListItem = ({ todo, onDelete }) => {
+const TodoListItem = ({ todo, onDelete, onEdit }) => {
   return (
     <div className={css.box}>
       <Text textAlign="center" marginBottom="20">
@@ -20,6 +19,13 @@ const TodoListItem = ({ todo, onDelete }) => {
         }}
       >
         <RiDeleteBinLine size={24} />
+      </button>
+      <button
+        className={css.editButton}
+        type="button"
+        onClick={() => onEdit(todo)}
+      >
+        <RiEdit2Line size={24} />
       </button>
     </div>
   );

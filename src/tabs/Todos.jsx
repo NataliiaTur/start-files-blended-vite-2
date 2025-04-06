@@ -1,3 +1,4 @@
+import EditForm from '../components/EditForm/EditForm';
 import FormComponent from '../components/FormComponent/FormComponent';
 import Text from '../components/Text/Text';
 import TodoList from '../components/TodoList/TodoList';
@@ -31,11 +32,52 @@ const Todos = () => {
     }
   }, [todos]);
 
+  // !============= Завдання із зірочкою ===============
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentTodo, setCurrentTodo] = useState({});
+  // Функція для перевірки дублікатів
+  const findTodo = text => {
+    return todos.some(todo => todo.text.toLowerCase() === text.toLowerCase());
+  };
+  // Форма редагування Відкрити
+  const handleEditTodo = todo => {
+    setIsEditing(true);
+    setCurrentTodo(todo);
+  };
+  // Скасувати редагування
+  const cancelUpdate = () => {
+    setIsEditing(false);
+    setCurrentTodo({});
+  };
+  // Оновити todo
+  const updateTodo = newText => {
+    if (findTodo(newText)) {
+      alert('Todo with this text already exists!');
+      return;
+    }
+
+    const updatedTodos = todos.map(todo =>
+      todo.id === currentTodo.id ? { ...todo, text: newText } : todo
+    );
+
+    setTodos(updatedTodos);
+    setIsEditing(false);
+    setCurrentTodo({});
+  };
+
   return (
     <>
-      <FormComponent addTodo={addNewTodo} />
+      {isEditing ? (
+        <EditForm
+          updateTodo={updateTodo}
+          cancelUpdate={cancelUpdate}
+          defaultValue={currentTodo.text}
+        />
+      ) : (
+        <FormComponent addTodo={addNewTodo} />
+      )}
       {todos.length > 0 ? (
-        <TodoList todos={todos} onDelete={deleteTodo} />
+        <TodoList todos={todos} onDelete={deleteTodo} onEdit={handleEditTodo} />
       ) : (
         <Text textAlign="center">There are no any todos ...</Text>
       )}
